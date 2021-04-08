@@ -5,9 +5,9 @@ GRUBDIR=$(BOOTDIR)/grub
 CFGFILE=$(GRUBDIR)/grub.cfg
 
 
-# Bootloader source & object
-BSRC=bootloader/bl.asm
-BOBJ=$(OUTDIR)/bl.o
+# Assembly core source & object
+CSRC=kernel/core.asm
+COBJ=$(OUTDIR)/core.o
 
 # Kernel source
 KSRC=kernel/kernel.pas
@@ -43,17 +43,14 @@ prep:
 	mkdir -p $(BOOTDIR)
 	mkdir -p $(GRUBDIR)
 
-boot:	prep $(BSRC)
-
-	$(AS) $(ASFLAGS) -o $(BOBJ) $(BSRC)
-
 kernel: prep $(KSRC)
 
+	$(AS) $(ASFLAGS) -o $(COBJ) $(CSRC)
 	$(PP) $(PPFLAGS) $(KSRC)
 
 img:	boot kernel $(ISRC)
 
-	$(LD) $(LDFLAGS) -T$(ISRC) -o $(IOBJ) $(KOBJ) $(BOBJ)
+	$(LD) $(LDFLAGS) -T$(ISRC) -o $(IOBJ) $(KOBJ) $(COBJ)
 
 iso:	img
 
