@@ -69,8 +69,9 @@ iso:	img
 run:	iso
 
 	$(QEMU) $(OUTDIR)/$(ISOF)
- 
+
 clean:
+
 	rm -rf $(OUTDIR)
 	rm -f *.o
 	rm -f *.ppu
