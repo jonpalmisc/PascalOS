@@ -8,6 +8,9 @@ procedure VGAClear;
 { Write a string to the VGA buffer }
 procedure VGAPrint(Message: PChar);
 
+{ Write a string to the VGA buffer and jump to the next line }
+procedure VGAPrintLine(Message: PChar);
+
 implementation
 
 var
@@ -56,6 +59,13 @@ begin
   CursorX := (Offset mod 160);
   CursorY := (Offset - CursorX) div 160;
   CursorX := CursorX shr 1;
+end;
+
+procedure VGAPrintLine(Message: PChar);
+begin
+  VGAPrint(Message);
+  CursorY += 1;
+  CursorX := 0;
 end;
 
 end.
