@@ -1,7 +1,7 @@
 # PascalOS
 
 In an attempt to learn how to write an operating system and to relive the
-nostalgia of tinkering with Delphi, I have decided to begin writing an
+nostalgia of tinkering with Delphi as a kid, I have decided to begin writing an
 operating system in Object Pascal. This is simply a toy project to work on when
 I am bored.
 
