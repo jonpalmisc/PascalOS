@@ -3,12 +3,11 @@ unit system;
 interface
 
 type
-  cardinal = 0..$FFFFFFFF;
-  hresult = cardinal;
-  dword = cardinal;
-  integer = longint;
+  Cardinal = 0..$FFFFFFFF;
+  HResult = Cardinal;
+  Integer = LongInt;
 
-  pchar = ^char;
+  PChar = ^Char;
 
 implementation
 
