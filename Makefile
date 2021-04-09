@@ -56,13 +56,13 @@ iso:	img
 
 	cp $(IOBJ) $(BOOTDIR)/image.o
 
-	echo 'set timeout=0' > $(CFGFILE)
-	echo 'set default =0' >> $(CFGFILE)
-	echo '' >> $(CFGFILE)
-	echo 'menuentry "PascalOS" {' >> $(CFGFILE)
-	echo '  multiboot /boot/image.o' >> $(CFGFILE)
-	echo '  boot' >> $(CFGFILE)
-	echo '}' >> $(CFGFILE)
+	@echo 'set timeout=0' > $(CFGFILE)
+	@echo 'set default =0' >> $(CFGFILE)
+	@echo '' >> $(CFGFILE)
+	@echo 'menuentry "PascalOS" {' >> $(CFGFILE)
+	@echo '  multiboot /boot/image.o' >> $(CFGFILE)
+	@echo '  boot' >> $(CFGFILE)
+	@echo '}' >> $(CFGFILE)
 
 	grub-mkrescue --output=$(OUTDIR)/$(ISOF) $(OUTDIR)
 
