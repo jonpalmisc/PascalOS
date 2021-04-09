@@ -28,8 +28,28 @@ global KernelStart
 KernelStart:
         mov esp, KERNELSTACK + KERNELSTACKSIZE
 
-	extern KernelMain
+        extern KernelMain
         call KernelMain
 
         cli
         hlt
+
+extern GDTHandle
+global GDTFlush
+GDTFlush:
+        push eax
+        lgdt [GDTHandle]
+
+
+        mov ax, 0x10
+        mov ds, ax
+        mov es, ax
+        mov fs, ax
+        mov gs, ax
+        mov ss, ax
+
+        jmp 0x08:.flush
+
+.flush:
+        pop eax
+        ret

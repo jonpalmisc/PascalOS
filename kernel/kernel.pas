@@ -2,7 +2,7 @@ unit kernel;
 
 interface
 
-uses vga;
+uses gdt, vga;
 
 procedure KernelMain; cdecl;
 
@@ -24,6 +24,10 @@ begin
   PrintBanner;
 
   VGAPrintLine('[PascalOS/KernelMain] Kernel entrypoint reached.');
+
+  VGAPrint('[PascalOS/KernelMain] Initializing GDT... ');
+  GDTInit;
+  VGAPrintLine('Done.')
 end;
 
 end.
