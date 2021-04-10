@@ -32,8 +32,9 @@ ASFLAGS=-f elf32
 LD=ld
 LDFLAGS=-A elf-i386 --gc-sections -s
 
-# QEMU executable
+# QEMU and Bochs executables
 QEMU=qemu-system-i386
+BOCHS=bochs
 
 .PHONY: all kernel boot img iso
 
@@ -66,9 +67,13 @@ iso:	img
 
 	grub-mkrescue --output=$(OUTDIR)/$(ISOF) $(OUTDIR)
 
-run:	iso
+runq:	iso
 
 	$(QEMU) $(OUTDIR)/$(ISOF)
+
+runb:	iso
+
+	$(BOCHS) -f bochsrc.txt -q
 
 clean:
 
