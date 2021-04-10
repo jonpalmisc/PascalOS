@@ -18,7 +18,7 @@ type
   end;
 
 var
-  GDTEntries: array [0..4] of TGDTEntry;
+  GDTEntries: array [0..2] of TGDTEntry;
   GDTHandle: TGDTHandle; export name 'GDTHandle';
 
 procedure GDTSetGate(Index: Byte; Base, Limit: LongWord; Access, Granularity: Byte);
@@ -52,8 +52,6 @@ begin
   GDTSetGate(0, 0, 0, 0, 0);
   GDTSetGate(1, 0, $FFFFFFFF, $9A, $CF);
   GDTSetGate(2, 0, $FFFFFFFF, $92, $CF);
-  GDTSetGate(3, 0, $FFFFFFFF, $FA, $CF);
-  GDTSetGate(4, 0, $FFFFFFFF, $F2, $CF);
 
   GDTFlush;
 end;
