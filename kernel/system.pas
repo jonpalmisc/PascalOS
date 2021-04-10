@@ -1,3 +1,8 @@
+// PascalOS
+// Copyright (c) 2021 Jon Palmisciano
+//
+// system.pas - Core system types, minimal RTL, etc.
+
 unit system;
 
 interface

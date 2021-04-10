@@ -1,3 +1,8 @@
+// PascalOS
+// Copyright (c) 2021 Jon Palmisciano
+//
+// gdt.pas - GDT setup interface
+
 unit gdt;
 
 interface

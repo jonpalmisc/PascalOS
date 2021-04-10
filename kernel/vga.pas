@@ -1,3 +1,8 @@
+// PascalOS
+// Copyright (c) 2021 Jon Palmisciano
+//
+// vga.pas - VGA buffer display & manipulation
+
 unit vga;
 
 interface
