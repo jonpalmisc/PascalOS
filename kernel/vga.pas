@@ -10,35 +10,35 @@ unit vga;
 interface
 
 { Clear the VGA Buffer (fill with space characters) }
-procedure VGAClear;
+procedure Clear;
 
 { Write a string to the VGA buffer }
-procedure VGAPrint(Message: PChar);
+procedure Print(Message: PChar);
 
 { Write a number to the VGA buffer in hexadecimal }
-procedure VGAPrintHex(N: Integer);
+procedure PrintHex(N: Integer);
 
 { Write a string to the VGA buffer and jump to the next line }
-procedure VGAPrintLine(Message: PChar);
+procedure PrintLine(Message: PChar);
 
 implementation
 
 var
   CursorX: Integer = 0;
   CursorY: Integer = 0;
-  VGABuffer: PChar = PChar($B8000);
+  Buffer: PChar = PChar($B8000);
 
 const
   HexCharMap: array[0..15] of char = '0123456789ABCDEF';
 
-procedure VGAClear;
+procedure Clear;
 var
   i: Integer;
 begin
-  for i := 0 to 3999 do VGABuffer[i] := #0;
+  for i := 0 to 3999 do Buffer[i] := #0;
 end;
 
-procedure VGAPrint(Message: PChar);
+procedure Print(Message: PChar);
 var
   Offset, I: Integer;
 begin
@@ -54,11 +54,11 @@ begin
   while (Message[I] <> Char($0)) do begin
 
     { Write the next character to the VGA buffer }
-    VGABuffer[Offset] := message[I];
+    Buffer[Offset] := message[I];
     Offset += 1;
 
     { Write the foreground/background color to the VGA buffer }
-    VGABuffer[Offset] := #7;
+    Buffer[Offset] := #7;
     Offset += 1;
 
     I += 1;
@@ -70,7 +70,7 @@ begin
   CursorX := CursorX shr 1;
 end;
 
-procedure VGAPrintHex(N: Integer);
+procedure PrintHex(N: Integer);
 var
   HexString: array[0..8] of Char;
   PHexString: PChar;
@@ -82,12 +82,12 @@ begin
   end;
 
   PHexString := @HexString;
-  VGAPrint(PHexString);
+  Print(PHexString);
 end;
 
-procedure VGAPrintLine(Message: PChar);
+procedure PrintLine(Message: PChar);
 begin
-  VGAPrint(Message);
+  Print(Message);
   CursorY += 1;
   CursorX := 0;
 end;

@@ -18,37 +18,37 @@ implementation
 { Print a welcome banner to the VGA buffer }
 procedure PrintBanner;
 begin
-  VGAPrintLine('====================================');
-  VGAPrintLine(' PascalOS v0.1.0');
-  VGAPrintLine(' Copyright (c) 2021 Jon Palmisciano');
-  VGAPrintLine('====================================');
-  VGAPrintLine('');
+  VGA.PrintLine('====================================');
+  VGA.PrintLine(' PascalOS v0.1.0');
+  VGA.PrintLine(' Copyright (c) 2021 Jon Palmisciano');
+  VGA.PrintLine('====================================');
+  VGA.PrintLine('');
 end;
 
 procedure KernelMain; cdecl; [public, alias: 'KernelMain'];
 begin
-  VGAClear;
+  VGA.Clear;
   PrintBanner;
 
-  VGAPrintLine('[PascalOS/KernelMain] Kernel entrypoint reached.');
+  VGA.PrintLine('[PascalOS/KernelMain] Kernel entrypoint reached.');
 
-  VGAPrint('[PascalOS/KernelMain] Initializing GDT... ');
+  VGA.Print('[PascalOS/KernelMain] Initializing GDT... ');
   GDT.Init;
-  VGAPrintLine('Done.');
+  VGA.PrintLine('Done.');
 
-  VGAPrint('[PascalOS/KernelMain] Initializing IDT...');
+  VGA.Print('[PascalOS/KernelMain] Initializing IDT...');
   IDTInit;
-  VGAPrintLine('Done.');
+  VGA.PrintLine('Done.');
 
-  VGAPrint('[PascalOS/KernelMain] IDT created in region at 0x');
-  VGAPrintHex(IDTHandle.FBase);
-  VGAPrint(' to 0x');
-  VGAPrintHex(IDTHandle.FBase + IDTHandle.FLimit);
-  VGAPrintLine('.');
+  VGA.Print('[PascalOS/KernelMain] IDT created in region at 0x');
+  VGA.PrintHex(IDTHandle.FBase);
+  VGA.Print(' to 0x');
+  VGA.PrintHex(IDTHandle.FBase + IDTHandle.FLimit);
+  VGA.PrintLine('.');
 
-  VGAPrint('[PascalOS/KernelMain] Creating core ISRs... ');
+  VGA.Print('[PascalOS/KernelMain] Creating core ISRs... ');
   ISRInit;
-  VGAPrintLine('Done.');
+  VGA.PrintLine('Done.');
 
   asm
     int 3
