@@ -13,6 +13,9 @@ procedure VGAClear;
 { Write a string to the VGA buffer }
 procedure VGAPrint(Message: PChar);
 
+{ Write a number to the VGA buffer in hexadecimal }
+procedure VGAPrintHex(N: Integer);
+
 { Write a string to the VGA buffer and jump to the next line }
 procedure VGAPrintLine(Message: PChar);
 
@@ -22,6 +25,9 @@ var
   CursorX: Integer = 0;
   CursorY: Integer = 0;
   VGABuffer: PChar = PChar($B8000);
+
+const
+  HexCharMap: array[0..15] of char = '0123456789ABCDEF';
 
 procedure VGAClear;
 var
@@ -64,6 +70,22 @@ begin
   CursorX := (Offset mod 160);
   CursorY := (Offset - CursorX) div 160;
   CursorX := CursorX shr 1;
+end;
+
+procedure VGAPrintHex(N: Integer);
+var
+  HexString: array[0..8] of Char;
+  PHexString: PChar;
+  I: Integer;
+begin
+  for I := 0 to 7 do
+  begin
+    HexString[7 - i] := HexCharMap[N and 15];
+    N := N shr 4;
+  end;
+
+  PHexString := @HexString;
+  VGAPrint(PHexString);
 end;
 
 procedure VGAPrintLine(Message: PChar);
