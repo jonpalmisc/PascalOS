@@ -17,7 +17,7 @@ implementation
 uses idt, vga;
 
 { Common ISR handler }
-procedure KernelCommon; [public, alias: 'ISRKernelCommon'];
+procedure HandleCommon; [public, alias: 'ISRHandleCommon'];
 begin
   VGA.PrintLine('[ISR.KernelCommon] Interrupt recieved!');
 end;

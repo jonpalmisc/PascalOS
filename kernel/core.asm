@@ -86,7 +86,7 @@ ISRStandard 30    ; Reserved
 ISRStandard 31    ; Reserved
 
 ;; Common ISR handler to collect arguments and pass control to the kernel
-extern ISRKernelCommon
+extern ISRHandleCommon
 ISRCommon:
 	pusha
 
