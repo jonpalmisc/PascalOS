@@ -19,7 +19,7 @@ uses idt, vga;
 { Common ISR handler }
 procedure KernelCommon; [public, alias: 'ISRKernelCommon'];
 begin
-  VGA.PrintLine('[PascalOS/ISRKernelCommon] Interrupt recieved!');
+  VGA.PrintLine('[ISR.KernelCommon] Interrupt recieved!');
 end;
 
 { References to the macro-generated ISR handlers in core.asm }

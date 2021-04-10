@@ -30,23 +30,23 @@ begin
   VGA.Clear;
   PrintBanner;
 
-  VGA.PrintLine('[PascalOS/KernelMain] Kernel entrypoint reached.');
+  VGA.PrintLine('[Kernel.Main] Kernel entrypoint reached.');
 
-  VGA.Print('[PascalOS/KernelMain] Initializing GDT... ');
+  VGA.Print('[Kernel.Main] Initializing GDT... ');
   GDT.Init;
   VGA.PrintLine('Done.');
 
-  VGA.Print('[PascalOS/KernelMain] Initializing IDT...');
+  VGA.Print('[Kernel.Main] Initializing IDT...');
   IDT.Init;
   VGA.PrintLine('Done.');
 
-  VGA.Print('[PascalOS/KernelMain] IDT created in region at 0x');
+  VGA.Print('[Kernel.Main] IDT region created at 0x');
   VGA.PrintHex(IDT.Region.FBase);
   VGA.Print(' to 0x');
   VGA.PrintHex(IDT.Region.FBase + IDT.Region.FLimit);
   VGA.PrintLine('.');
 
-  VGA.Print('[PascalOS/KernelMain] Creating core ISRs... ');
+  VGA.Print('[Kernel.Main] Creating core ISRs... ');
   ISR.RegisterHandlers;
   VGA.PrintLine('Done.');
 
