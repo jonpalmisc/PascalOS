@@ -11,7 +11,7 @@ interface
 
 uses gdt, idt, isr, vga;
 
-procedure KernelMain; cdecl;
+procedure Main;
 
 implementation
 
@@ -25,7 +25,7 @@ begin
   VGA.PrintLine('');
 end;
 
-procedure KernelMain; cdecl; [public, alias: 'KernelMain'];
+procedure Main; [public, alias: 'KernelMain'];
 begin
   VGA.Clear;
   PrintBanner;
