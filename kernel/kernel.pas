@@ -37,17 +37,17 @@ begin
   VGA.PrintLine('Done.');
 
   VGA.Print('[PascalOS/KernelMain] Initializing IDT...');
-  IDTInit;
+  IDT.Init;
   VGA.PrintLine('Done.');
 
   VGA.Print('[PascalOS/KernelMain] IDT created in region at 0x');
-  VGA.PrintHex(IDTHandle.FBase);
+  VGA.PrintHex(IDT.Region.FBase);
   VGA.Print(' to 0x');
-  VGA.PrintHex(IDTHandle.FBase + IDTHandle.FLimit);
+  VGA.PrintHex(IDT.Region.FBase + IDT.Region.FLimit);
   VGA.PrintLine('.');
 
   VGA.Print('[PascalOS/KernelMain] Creating core ISRs... ');
-  ISRInit;
+  ISR.RegisterHandlers;
   VGA.PrintLine('Done.');
 
   asm

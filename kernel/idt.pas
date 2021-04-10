@@ -21,47 +21,47 @@ type
   end;
 
   { A handle to the IDT as a whole }
-  TIDTHandle = packed record
+  TIDTRegion = packed record
     FLimit: Word;
     FBase: LongWord;
   end;
 
 var
-  IDTEntries: array [0..255] of TIDTEntry;
-  IDTHandle: TIDTHandle;
+  Entries: array [0..255] of TIDTEntry;
+  Region: TIDTRegion;
 
 { Initialize the IDT }
-procedure IDTInit;
+procedure Init;
 
 { Configure an IDT entry }
-procedure IDTSetEntry(I: Byte; Base: LongWord; Selector: Word; Options: Byte);
+procedure SetEntry(I: Byte; Base: LongWord; Selector: Word; Options: Byte);
 
 implementation
 
 uses vga;
 
-procedure IDTLoad; assembler; nostackframe;
+procedure Load; assembler; nostackframe;
 asm
-  lidt [IDTHandle]
+  lidt [Region]
 end;
 
-procedure IDTInit;
+procedure Init;
 var
   I: Integer;
 begin
-  with IDTHandle do begin
-    FLimit := SizeOf(IDTEntries) - 1;
-    FBase := LongWord(@IDTEntries);
+  with Region do begin
+    FLimit := SizeOf(Entries) - 1;
+    FBase := LongWord(@Entries);
   end;
 
   { TODO: Should probably zero out the IDT region first }
 
-  IDTLoad;
+  Load;
 end;
 
-procedure IDTSetEntry(I: Byte; Base: LongWord; Selector: Word; Options: Byte);
+procedure SetEntry(I: Byte; Base: LongWord; Selector: Word; Options: Byte);
 begin
-  with IDTEntries[I] do begin
+  with Entries[I] do begin
     FLowBase := Base and $FFFF;
     FHighBase := (Base shr 16) and $FFFF;
     FSelector := Selector;
