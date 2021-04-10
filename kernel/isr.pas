@@ -1,23 +1,28 @@
-// PascalOS
-// Copyright (c) 2021 Jon Palmisciano
-//
-// isr.pas - ISR setup and handling
+{*
+ * PascalOS
+ * Copyright (c) 2021 Jon Palmisciano
+
+ * isr.pas - ISR setup and handling
+ *}
 
 unit isr;
 
 interface
 
+{ Create IDT entries for the common ISRs }
 procedure ISRInit;
 
 implementation
 
 uses idt, vga;
 
+{ Common ISR handler }
 procedure ISRKernelCommon; [public, alias: 'ISRKernelCommon'];
 begin
   VGAPrintLine('[PascalOS/ISRKernelCommon] Interrupt recieved!');
 end;
 
+{ References to the macro-generated ISR handlers in core.asm }
 procedure ISR0; external name 'ISR0';
 procedure ISR1; external name 'ISR1';
 procedure ISR2; external name 'ISR2';
