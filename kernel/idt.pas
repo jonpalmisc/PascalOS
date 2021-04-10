@@ -31,6 +31,9 @@ var
 { Initialize the IDT }
 procedure IDTInit;
 
+{ Configure an IDT entry }
+procedure IDTSetEntry(I: Byte; Base: LongWord; Selector: Word; Options: Byte);
+
 implementation
 
 uses vga;
@@ -53,12 +56,18 @@ begin
   { TODO: Should zero out the IDT region first }
 
   IDTLoad;
+end;
 
-  VGAPrint('[PascalOS/IDTInit] IDT initialized at 0x');
-  VGAPrintHex(IDTHandle.FBase);
-  VGAPrint(' to 0x');
-  VGAPrintHex(IDTHandle.FBase + IDTHandle.FLimit);
-  VGAPrintLine('.');
+procedure IDTSetEntry(I: Byte; Base: LongWord; Selector: Word; Options: Byte);
+begin
+  with IDTEntries[I] do
+  begin
+    FLowBase := Base and $FFFF;
+    FHighBase := (Base shr 16) and $FFFF;
+    FSelector := Selector;
+    FAlwaysZero := 0;
+    FOptions := Options;
+  end;
 end;
 
 end.

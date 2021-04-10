@@ -7,7 +7,7 @@ unit kernel;
 
 interface
 
-uses gdt, idt, vga;
+uses gdt, idt, isr, vga;
 
 procedure KernelMain; cdecl;
 
@@ -34,9 +34,23 @@ begin
   GDTInit;
   VGAPrintLine('Done.');
 
-  VGAPrintLine('[PascalOS/KernelMain] Initializing IDT... ');
+  VGAPrint('[PascalOS/KernelMain] Initializing IDT...');
   IDTInit;
-  VGAPrintLine('[PascalOS/KernelMain] IDT configured successfully. ');
+  VGAPrintLine('Done.');
+
+  VGAPrint('[PascalOS/KernelMain] IDT created in region at 0x');
+  VGAPrintHex(IDTHandle.FBase);
+  VGAPrint(' to 0x');
+  VGAPrintHex(IDTHandle.FBase + IDTHandle.FLimit);
+  VGAPrintLine('.');
+
+  VGAPrint('[PascalOS/KernelMain] Creating core ISRs... ');
+  ISRInit;
+  VGAPrintLine('Done.');
+
+  asm
+    int 3
+  end;
 end;
 
 end.
