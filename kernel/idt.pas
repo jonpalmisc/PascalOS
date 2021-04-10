@@ -1,7 +1,9 @@
-// PascalOS
-// Copyright (c) 2021 Jon Palmisciano
-//
-// idt.pas - IDT configuration, etc.
+{*
+ * PascalOS
+ * Copyright (c) 2021 Jon Palmisciano
+ *
+ * idt.pas - IDT configuration, etc.
+ *}
 
 unit idt;
 
@@ -47,21 +49,19 @@ procedure IDTInit;
 var
   I: Integer;
 begin
-  with IDTHandle do
-  begin
+  with IDTHandle do begin
     FLimit := SizeOf(IDTEntries) - 1;
     FBase := LongWord(@IDTEntries);
   end;
 
-  { TODO: Should zero out the IDT region first }
+  { TODO: Should probably zero out the IDT region first }
 
   IDTLoad;
 end;
 
 procedure IDTSetEntry(I: Byte; Base: LongWord; Selector: Word; Options: Byte);
 begin
-  with IDTEntries[I] do
-  begin
+  with IDTEntries[I] do begin
     FLowBase := Base and $FFFF;
     FHighBase := (Base shr 16) and $FFFF;
     FSelector := Selector;

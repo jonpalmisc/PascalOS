@@ -1,7 +1,9 @@
-// PascalOS
-// Copyright (c) 2021 Jon Palmisciano
-//
-// gdt.pas - GDT setup interface
+{*
+ * PascalOS
+ * Copyright (c) 2021 Jon Palmisciano
+ *
+ * gdt.pas - GDT setup interface
+ *}
 
 unit gdt;
 
@@ -45,8 +47,7 @@ procedure GDTFlush; external name 'GDTFlush';
 
 procedure GDTSetGate(I: Byte; Base, Limit: LongWord; Access, Granularity: Byte);
 begin
-  with GDTEntries[I] do
-  begin
+  with GDTEntries[I] do begin
     FLowBase := (Base and $FFFF);
     FMiddleBase := (Base shr 16) and $FF;
     FHighBase := (Base shr 24) and $FF;
@@ -58,8 +59,7 @@ end;
 
 procedure GDTInit;
 begin
-  with GDTHandle do
-  begin
+  with GDTHandle do begin
     FLimit := SizeOf(GDTEntries) - 1;
     FBase := LongWord(@GDTEntries);
   end;

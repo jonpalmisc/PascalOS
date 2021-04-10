@@ -1,7 +1,9 @@
-// PascalOS
-// Copyright (c) 2021 Jon Palmisciano
-//
-// vga.pas - VGA buffer display & manipulation
+{*
+ * PascalOS
+ * Copyright (c) 2021 Jon Palmisciano
+ *
+ * vga.pas - VGA buffer display & manipulation
+ *}
 
 unit vga;
 
@@ -33,8 +35,7 @@ procedure VGAClear;
 var
   i: Integer;
 begin
-  for i := 0 to 3999 do
-    VGABuffer[i] := #0;
+  for i := 0 to 3999 do VGABuffer[i] := #0;
 end;
 
 procedure VGAPrint(Message: PChar);
@@ -45,15 +46,12 @@ begin
   I := 0;
 
   { Wrap lines }
-  if (CursorY > 24) then
-    CursorY := 0;
+  if (CursorY > 24) then CursorY := 0;
 
   { Wrap columns }
-  if (CursorX > 79) then
-    CursorX := 0;
+  if (CursorX > 79) then CursorX := 0;
 
-  while (Message[I] <> Char($0)) do
-  begin
+  while (Message[I] <> Char($0)) do begin
 
     { Write the next character to the VGA buffer }
     VGABuffer[Offset] := message[I];
@@ -78,8 +76,7 @@ var
   PHexString: PChar;
   I: Integer;
 begin
-  for I := 0 to 7 do
-  begin
+  for I := 0 to 7 do begin
     HexString[7 - i] := HexCharMap[N and 15];
     N := N shr 4;
   end;

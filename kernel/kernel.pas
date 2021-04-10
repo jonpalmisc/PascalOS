@@ -1,7 +1,9 @@
-// PascalOS
-// Copyright (c) 2021 Jon Palmisciano
-//
-// kernel.pas - Pascal-side kernel core
+{*
+ * PascalOS
+ * Copyright (c) 2021 Jon Palmisciano
+ *
+ * kernel.pas - Pascal-side kernel core
+ *}
 
 unit kernel;
 
