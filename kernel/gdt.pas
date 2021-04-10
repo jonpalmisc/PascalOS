@@ -3,6 +3,8 @@ unit gdt;
 interface
 
 type
+
+  { An entry in the GDT }
   TGDTEntry = packed record
     FLowLimit: Word;
     FLowBase: Word;
@@ -12,25 +14,33 @@ type
     FHighBase: Byte;
   end;
 
+  { A handle/pointer to the GDT }
   TGDTHandle = packed record
     FLimit: Word;
     FBase: LongWord;
   end;
 
 var
+
+  { Global variable for GDT entries/content }
   GDTEntries: array [0..2] of TGDTEntry;
+
+  { Global handle/pointer to the GDT itself }
   GDTHandle: TGDTHandle; export name 'GDTHandle';
 
-procedure GDTSetGate(Index: Byte; Base, Limit: LongWord; Access, Granularity: Byte);
+{ Configure a single GDT entry at index I }
+procedure GDTSetGate(I: Byte; Base, Limit: LongWord; Access, Granularity: Byte);
+
+{ Initialize the GDT }
 procedure GDTInit;
 
 implementation
 
 procedure GDTFlush; external name 'GDTFlush';
 
-procedure GDTSetGate(Index: Byte; Base, Limit: LongWord; Access, Granularity: Byte);
+procedure GDTSetGate(I: Byte; Base, Limit: LongWord; Access, Granularity: Byte);
 begin
-  with GDTEntries[Index] do
+  with GDTEntries[I] do
   begin
     FLowBase := (Base and $FFFF);
     FMiddleBase := (Base shr 16) and $FF;
@@ -49,9 +59,9 @@ begin
     FBase := LongWord(@GDTEntries);
   end;
 
-  GDTSetGate(0, 0, 0, 0, 0);
-  GDTSetGate(1, 0, $FFFFFFFF, $9A, $CF);
-  GDTSetGate(2, 0, $FFFFFFFF, $92, $CF);
+  GDTSetGate(0, 0, 0, 0, 0);              { Create null segment }
+  GDTSetGate(1, 0, $FFFFFFFF, $9A, $CF);  { Create kernel code segment }
+  GDTSetGate(2, 0, $FFFFFFFF, $92, $CF);  { Create kernel data segment }
 
   GDTFlush;
 end;
