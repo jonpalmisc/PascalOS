@@ -1,7 +1,7 @@
 ;; PascalOS
 ;; Copyright (c) 2021 Jon Palmisciano
 ;;
-;; core.asm - Kernel core assembly, jump-to-Pascal
+;; core.asm - Kernel core assembly, IDT/ISR/IRQ, jump-to-Pascal, etc.
 
 bits 32
 
@@ -14,7 +14,6 @@ MBCHECKSUM equ -(MBMAGIC + MBFLAGS)
 
 ;; Default kernel stack size
 KERNELSTACKSIZE equ 0x4000
-
 
 ;; Kernel stack region
 section .bss
@@ -40,7 +39,6 @@ ISR%1:
 	push byte 0
 	push byte %1
 	jmp ISRCommon
-
 %endmacro
 
 ;; Macro for ISR handlers WITH error codes
@@ -50,42 +48,44 @@ ISR%1:
 	cli
 	push byte %1
 	jmp ISRCommon
-
 %endmacro
 
-ISRStandard 0 ; Divide by zero
-ISRStandard 1 ; Debug
-ISRStandard 2 ; Non-maskable interrupt
-ISRStandard 3 ; Breakpoint
-ISRStandard 4 ; Into detected overflow
-ISRStandard 5 ; Out of bounds
-ISRStandard 6 ; Invalid opcode
-ISRStandard 7 ; No coprocessor
-ISRSpecial 8 ; Double fault
-ISRStandard 9 ; Coprocessor segment overrun
-ISRSpecial 10 ; Bad TSS
-ISRSpecial 11 ; Segment not present
-ISRSpecial 12 ; Stack fault
-ISRSpecial 13 ; General protection fault
-ISRSpecial 14 ; Page fault
-ISRStandard 15 ; Unknown interrupt
-ISRStandard 16 ; Coprocessor fault
-ISRStandard 17 ; Alignment check
-ISRStandard 18 ; Machine check
-ISRStandard 19 ; Reserved
-ISRStandard 20 ; Reserved
-ISRStandard 21 ; Reserved
-ISRStandard 22 ; Reserved
-ISRStandard 23 ; Reserved
-ISRStandard 24 ; Reserved
-ISRStandard 25 ; Reserved
-ISRStandard 26 ; Reserved
-ISRStandard 27 ; Reserved
-ISRStandard 28 ; Reserved
-ISRStandard 29 ; Reserved
-ISRStandard 30 ; Reserved
-ISRStandard 31 ; Reserved
+;; Generate ISR handlers with the macros above
 
+ISRStandard 0     ; Divide by zero
+ISRStandard 1     ; Debug
+ISRStandard 2     ; Non-maskable interrupt
+ISRStandard 3     ; Breakpoint
+ISRStandard 4     ; Into detected overflow
+ISRStandard 5     ; Out of bounds
+ISRStandard 6     ; Invalid opcode
+ISRStandard 7     ; No coprocessor
+ISRSpecial 8      ; Double fault
+ISRStandard 9     ; Coprocessor segment overrun
+ISRSpecial 10     ; Bad TSS
+ISRSpecial 11     ; Segment not present
+ISRSpecial 12     ; Stack fault
+ISRSpecial 13     ; General protection fault
+ISRSpecial 14     ; Page fault
+ISRStandard 15    ; Unknown interrupt
+ISRStandard 16    ; Coprocessor fault
+ISRStandard 17    ; Alignment check
+ISRStandard 18    ; Machine check
+ISRStandard 19    ; Reserved
+ISRStandard 20    ; Reserved
+ISRStandard 21    ; Reserved
+ISRStandard 22    ; Reserved
+ISRStandard 23    ; Reserved
+ISRStandard 24    ; Reserved
+ISRStandard 25    ; Reserved
+ISRStandard 26    ; Reserved
+ISRStandard 27    ; Reserved
+ISRStandard 28    ; Reserved
+ISRStandard 29    ; Reserved
+ISRStandard 30    ; Reserved
+ISRStandard 31    ; Reserved
+
+;; Common ISR handler to collect arguments and pass control to the kernel
 extern ISRKernelCommon
 ISRCommon:
 	pusha
