@@ -127,11 +127,11 @@ KernelStart:
         cli
         hlt
 
-extern GDTHandle
+extern GDTRegion
 global GDTFlush
 GDTFlush:
         push eax
-        lgdt [GDTHandle]
+        lgdt [GDTRegion]
 
 
         mov ax, 0x10

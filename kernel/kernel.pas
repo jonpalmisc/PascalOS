@@ -33,7 +33,7 @@ begin
   VGAPrintLine('[PascalOS/KernelMain] Kernel entrypoint reached.');
 
   VGAPrint('[PascalOS/KernelMain] Initializing GDT... ');
-  GDTInit;
+  GDT.Init;
   VGAPrintLine('Done.');
 
   VGAPrint('[PascalOS/KernelMain] Initializing IDT...');

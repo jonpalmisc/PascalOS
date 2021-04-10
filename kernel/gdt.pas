@@ -21,33 +21,33 @@ type
     FHighBase: Byte;
   end;
 
-  { A handle/pointer to the GDT }
-  TGDTHandle = packed record
+  { The GDT memory region }
+  TGDTRegion = packed record
     FLimit: Word;
     FBase: LongWord;
   end;
 
 var
 
-  { Global variable for GDT entries/content }
-  GDTEntries: array [0..2] of TGDTEntry;
+  { Global array for GDT entries/content }
+  Entries: array [0..2] of TGDTEntry;
 
-  { Global handle/pointer to the GDT itself }
-  GDTHandle: TGDTHandle; export name 'GDTHandle';
+  { Global GDT region variable }
+  Region: TGDTRegion; export name 'GDTRegion';
 
 { Configure a single GDT entry at index I }
-procedure GDTSetGate(I: Byte; Base, Limit: LongWord; Access, Granularity: Byte);
+procedure SetEntry(I: Byte; Base, Limit: LongWord; Access, Granularity: Byte);
 
 { Initialize the GDT }
-procedure GDTInit;
+procedure Init;
 
 implementation
 
-procedure GDTFlush; external name 'GDTFlush';
+procedure Flush; external name 'GDTFlush';
 
-procedure GDTSetGate(I: Byte; Base, Limit: LongWord; Access, Granularity: Byte);
+procedure SetEntry(I: Byte; Base, Limit: LongWord; Access, Granularity: Byte);
 begin
-  with GDTEntries[I] do begin
+  with Entries[I] do begin
     FLowBase := (Base and $FFFF);
     FMiddleBase := (Base shr 16) and $FF;
     FHighBase := (Base shr 24) and $FF;
@@ -57,18 +57,23 @@ begin
   end;
 end;
 
-procedure GDTInit;
+procedure Init;
 begin
-  with GDTHandle do begin
-    FLimit := SizeOf(GDTEntries) - 1;
-    FBase := LongWord(@GDTEntries);
+  with Region do begin
+    FLimit := SizeOf(Entries) - 1;
+    FBase := LongWord(@Entries);
   end;
 
-  GDTSetGate(0, 0, 0, 0, 0);              { Create null segment }
-  GDTSetGate(1, 0, $FFFFFFFF, $9A, $CF);  { Create kernel code segment }
-  GDTSetGate(2, 0, $FFFFFFFF, $92, $CF);  { Create kernel data segment }
+  { Create null segment }
+  SetEntry(0, 0, 0, 0, 0);
 
-  GDTFlush;
+  { Create kernel code segment }
+  SetEntry(1, 0, $FFFFFFFF, $9A, $CF);
+
+  { Create kernel data segment }
+  SetEntry(2, 0, $FFFFFFFF, $92, $CF);
+
+  Flush;
 end;
 
 end.
