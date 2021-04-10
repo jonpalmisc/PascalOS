@@ -1,15 +1,22 @@
+;; PascalOS
+;; Copyright (c) 2021 Jon Palmisciano
+;;
+;; core.asm - Kernel core assembly, jump-to-Pascal
+
 bits 32
 
+;; Multiboot-related constants, etc.
 MBALIGN equ 1 << 0
 MEMINFO equ 1 << 1
 MBFLAGS equ MBALIGN | MEMINFO
 MBMAGIC equ 0x1BADB002
 MBCHECKSUM equ -(MBMAGIC + MBFLAGS)
 
+;; Default kernel stack size
 KERNELSTACKSIZE equ 0x4000
 
 
-;; Kernel stack
+;; Kernel stack region
 section .bss
 align 16 
 KERNELSTACK:
