@@ -5,6 +5,23 @@ nostalgia of tinkering with Delphi as a kid, I have decided to begin writing an
 operating system in Object Pascal. This is simply a toy project to work on when
 I am bored.
 
+## Progress and features
+
+Despite having "OS" in the name, PascalOS is far from an operating system
+right now. Here's a summary of what is and isn't currently implemented:
+
+- [x] Boot to kernel entrypoint
+- [x] Basic GDT setup
+- [x] Bare-minimum IDT setup and ISR handling
+- [ ] IRQ handling
+- [ ] Keyboard support
+- [ ] Virtual memeory (paging)
+- [ ] Dynamic memory allocation
+- [ ] Filesystem support
+- [ ] Multitasking
+- [ ] User mode
+- [ ] Everything else
+
 ## Build instructions
 
 **WARNING**: The current Makefile makes some pretty strong assumptions about
@@ -33,6 +50,14 @@ To run the OS after building the ISO, use the included run targets:
 make runb # to run with Bochs; or
 make runq # to run with QEMU
 ```
+
+## Acknowledgements
+
+This project would not have been possible without the following resources:
+
+- The [OSDev Wiki](https://wiki.osdev.org/Expanded_Main_Page)
+- [James Molloy's Kernel Development Tutorials](http://www.jamesmolloy.co.uk/tutorial_html/)
+- [Bran's Kernel Development Tutorials](http://www.osdever.net/bkerndev/index.php)
 
 ## License
 
