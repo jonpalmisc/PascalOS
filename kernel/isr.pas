@@ -9,6 +9,14 @@ unit isr;
 
 interface
 
+type
+  TInterruptState = record
+    GS, FS, ES, DS: LongWord;
+    EDI, ESI, EBP, ESP, EBX, EDX, ECX, EAX: LongWord;
+    Interrupt, ErrorCode: LongWord;
+    EIP, CS, EFLAGS, UserESP, SS: LongWord;
+  end;
+
 { Create IDT entries for the common ISRs }
 procedure RegisterHandlers;
 
@@ -17,9 +25,13 @@ implementation
 uses idt, vga;
 
 { Common ISR handler }
-procedure HandleCommon; [public, alias: 'ISRHandleCommon'];
+procedure HandleCommon(var State: TInterruptState); cdecl; [public, alias: 'ISRHandleCommon'];
 begin
-  VGA.PrintLine('[ISR.KernelCommon] Interrupt recieved!');
+  VGA.Print('[ISR.HandleCommon] Interrupt 0x');
+  VGA.PrintHex(State.Interrupt);
+  VGA.Print('/0x');
+  VGA.PrintHex(State.ErrorCode);
+  VGA.PrintLine(' received!');
 end;
 
 { References to the macro-generated ISR handlers in core.asm }
