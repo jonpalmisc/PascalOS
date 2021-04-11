@@ -13,18 +13,18 @@ type
 
   { An entry in the GDT }
   TGDTEntry = packed record
-    FLowLimit: Word;
-    FLowBase: Word;
-    FMiddleBase: Byte;
-    FAccess: Byte;
-    FGranularity: Byte;
-    FHighBase: Byte;
+    LowLimit: Word;
+    LowBase: Word;
+    MiddleBase: Byte;
+    Access: Byte;
+    Granularity: Byte;
+    HighBase: Byte;
   end;
 
   { The GDT memory region }
   TGDTRegion = packed record
-    FLimit: Word;
-    FBase: LongWord;
+    Limit: Word;
+    Base: LongWord;
   end;
 
 var
@@ -47,21 +47,19 @@ procedure Flush; external name 'GDTFlush';
 
 procedure SetEntry(I: Byte; Base, Limit: LongWord; Access, Granularity: Byte);
 begin
-  with Entries[I] do begin
-    FLowBase := (Base and $FFFF);
-    FMiddleBase := (Base shr 16) and $FF;
-    FHighBase := (Base shr 24) and $FF;
-    FLowLimit := (Limit and $FFFF);
-    FGranularity := ((Limit shr 16) and $F) or (Granularity and $F0);
-    FAccess := Access;
-  end;
+  Entries[I].LowBase := (Base and $FFFF);
+  Entries[I].MiddleBase := (Base shr 16) and $FF;
+  Entries[I].HighBase := (Base shr 24) and $FF;
+  Entries[I].LowLimit := (Limit and $FFFF);
+  Entries[I].Granularity := ((Limit shr 16) and $F) or (Granularity and $F0);
+  Entries[I].Access := Access;
 end;
 
 procedure Init;
 begin
   with Region do begin
-    FLimit := SizeOf(Entries) - 1;
-    FBase := LongWord(@Entries);
+    Limit := SizeOf(Entries) - 1;
+    Base := LongWord(@Entries);
   end;
 
   { Create null segment }

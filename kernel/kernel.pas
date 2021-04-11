@@ -41,9 +41,9 @@ begin
   VGA.PrintLine('Done.');
 
   VGA.Print('[Kernel.Main] IDT region created at 0x');
-  VGA.PrintHex(IDT.Region.FBase);
+  VGA.PrintHex(IDT.Region.Base);
   VGA.Print(' to 0x');
-  VGA.PrintHex(IDT.Region.FBase + IDT.Region.FLimit);
+  VGA.PrintHex(IDT.Region.Base + IDT.Region.Limit);
   VGA.PrintLine('.');
 
   VGA.Print('[Kernel.Main] Creating core ISRs... ');

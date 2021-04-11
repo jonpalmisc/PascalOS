@@ -13,17 +13,17 @@ type
 
   { A single IDT entry }
   TIDTEntry = packed record
-    FLowBase: Word;
-    FSelector: Word;
-    FAlwaysZero: Byte;
-    FOptions: Byte;
-    FHighBase: Word;
+    LowBase: Word;
+    Selector: Word;
+    AlwaysZero: Byte;
+    Options: Byte;
+    HighBase: Word;
   end;
 
   { A handle to the IDT as a whole }
   TIDTRegion = packed record
-    FLimit: Word;
-    FBase: LongWord;
+    Limit: Word;
+    Base: LongWord;
   end;
 
 var
@@ -50,8 +50,8 @@ var
   I: Integer;
 begin
   with Region do begin
-    FLimit := SizeOf(Entries) - 1;
-    FBase := LongWord(@Entries);
+    Limit := SizeOf(Entries) - 1;
+    Base := LongWord(@Entries);
   end;
 
   { TODO: Should probably zero out the IDT region first }
@@ -61,13 +61,11 @@ end;
 
 procedure SetEntry(I: Byte; Base: LongWord; Selector: Word; Options: Byte);
 begin
-  with Entries[I] do begin
-    FLowBase := Base and $FFFF;
-    FHighBase := (Base shr 16) and $FFFF;
-    FSelector := Selector;
-    FAlwaysZero := 0;
-    FOptions := Options;
-  end;
+  Entries[I].LowBase := Base and $FFFF;
+  Entries[I].HighBase := (Base shr 16) and $FFFF;
+  Entries[I].Selector := Selector;
+  Entries[I].AlwaysZero := 0;
+  Entries[I].Options := Options;
 end;
 
 end.
