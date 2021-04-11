@@ -103,7 +103,7 @@ ISRCommon:
 	mov eax, esp
 	push eax
 
-	mov eax, ISRKernelCommon
+	mov eax, ISRHandleCommon
 	call eax
 
 	pop eax
