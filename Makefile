@@ -1,22 +1,20 @@
-# Build directories
+# Build files & directories
 BUILD_DIR=out
 GRUB_CONFIG=$(BUILD_DIR)/boot/grub/grub.cfg
+ISO_NAME=pascalos.iso
 
 
-# Assembly core source & object
+# Assembly boot core
 ASM_SOURCE=kernel/core.asm
 ASM_OBJECTS=$(BUILD_DIR)/core.o
 
-# Kernel source
+# The actual kernel
 PAS_SOURCE=kernel/kernel.pas
 PAS_OBJECTS:=$(patsubst kernel/%.pas, $(BUILD_DIR)/%.o, $(wildcard kernel/*.pas))
 
-# Image/link source
+# Linker script
 LD_SOURCE=image/image.ld
 LD_OBJECTS=$(BUILD_DIR)/image.o
-
-# ISO output file
-ISO_NAME=pascalos.iso
 
 # Pascal compiler and compiler flags
 PP=fpc
