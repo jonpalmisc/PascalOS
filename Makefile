@@ -3,7 +3,6 @@ BUILD_DIR=out
 GRUB_CONFIG=$(BUILD_DIR)/boot/grub/grub.cfg
 ISO_NAME=pascalos.iso
 
-
 # Assembly boot core
 ASM_SOURCE=kernel/core.asm
 ASM_OBJECTS=$(BUILD_DIR)/core.o
@@ -34,16 +33,21 @@ BOCHS=bochs
 
 .PHONY: clean kernel
 
-kernel: $(PAS_SOURCE)
+clean:
+	@rm -rf $(BUILD_DIR)
+	@rm -f *.o
+	@rm -f *.ppu
 
+	@echo "Build artifacts removed."
+
+kernel: $(PAS_SOURCE)
 	mkdir -p $(BUILD_DIR)
 
 	$(AS) $(ASFLAGS) -o $(ASM_OBJECTS) $(ASM_SOURCE)
 	$(PP) $(PPFLAGS) $(PAS_SOURCE)
 	$(LD) $(LDFLAGS) -T$(LD_SOURCE) -o $(LD_OBJECTS) $(PAS_OBJECTS) $(ASM_OBJECTS)
 
-iso:	kernel
-
+iso: kernel
 	mkdir -p $(BUILD_DIR)/boot/grub
 	cp $(LD_OBJECTS) $(BUILD_DIR)/boot/image.o
 
@@ -57,18 +61,8 @@ iso:	kernel
 
 	grub-mkrescue --output=$(BUILD_DIR)/$(ISO_NAME) $(BUILD_DIR)
 
-runq:	iso
-
+runq: iso
 	$(QEMU) $(BUILD_DIR)/$(ISO_NAME)
 
-runb:	iso
-
+runb: iso
 	$(BOCHS) -f bochsrc.txt -q
-
-clean:
-
-	@rm -rf $(BUILD_DIR)
-	@rm -f *.o
-	@rm -f *.ppu
-
-	@echo "Build artifacts removed."
