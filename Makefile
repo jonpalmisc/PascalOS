@@ -34,22 +34,17 @@ LDFLAGS=-A elf-i386 --gc-sections -s
 QEMU=qemu-system-i386
 BOCHS=bochs
 
-.PHONY: all kernel boot img iso
+.PHONY: clean kernel
 
-prep:
+kernel: $(PAS_SOURCE)
 
 	mkdir -p $(BUILD_DIR)
 
-kernel: prep $(PAS_SOURCE)
-
 	$(AS) $(ASFLAGS) -o $(ASM_OBJECTS) $(ASM_SOURCE)
 	$(PP) $(PPFLAGS) $(PAS_SOURCE)
-
-img:	boot kernel $(LD_SOURCE)
-
 	$(LD) $(LDFLAGS) -T$(LD_SOURCE) -o $(LD_OBJECTS) $(PAS_OBJECTS) $(ASM_OBJECTS)
 
-iso:	img
+iso:	kernel
 
 	mkdir -p $(BUILD_DIR)/boot/grub
 	cp $(LD_OBJECTS) $(BUILD_DIR)/boot/image.o
