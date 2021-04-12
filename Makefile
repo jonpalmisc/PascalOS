@@ -1,28 +1,26 @@
 # Build directories
-OUTDIR=out
-BOOTDIR=$(OUTDIR)/boot
-GRUBDIR=$(BOOTDIR)/grub
-CFGFILE=$(GRUBDIR)/grub.cfg
+BUILD_DIR=out
+GRUB_CONFIG=$(BUILD_DIR)/boot/grub/grub.cfg
 
 
 # Assembly core source & object
-CSRC=kernel/core.asm
-COBJ=$(OUTDIR)/core.o
+ASM_SOURCE=kernel/core.asm
+ASM_OBJECTS=$(BUILD_DIR)/core.o
 
 # Kernel source
-KSRC=kernel/kernel.pas
-KOBJ:=$(patsubst kernel/%.pas, $(OUTDIR)/%.o, $(wildcard kernel/*.pas))
+PAS_SOURCE=kernel/kernel.pas
+PAS_OBJECTS:=$(patsubst kernel/%.pas, $(BUILD_DIR)/%.o, $(wildcard kernel/*.pas))
 
 # Image/link source
-ISRC=image/image.ld
-IOBJ=$(OUTDIR)/image.o
+LD_SOURCE=image/image.ld
+LD_OBJECTS=$(BUILD_DIR)/image.o
 
 # ISO output file
-ISOF=pascalos.iso
+ISO_NAME=pascalos.iso
 
 # Pascal compiler and compiler flags
 PP=fpc
-PPFLAGS=-Aelf -n -O3 -Op3 -Si -Sc -Sg -Xd -CX -XXs -Pi386 -Rintel -Tlinux -o"$(OUTDIR)/"
+PPFLAGS=-Aelf -n -O3 -Op3 -Si -Sc -Sg -Xd -CX -XXs -Pi386 -Rintel -Tlinux -o"$(BUILD_DIR)/"
 
 # Assembler and assembler flags
 AS=nasm
@@ -40,36 +38,35 @@ BOCHS=bochs
 
 prep:
 
-	mkdir -p $(OUTDIR)
-	mkdir -p $(BOOTDIR)
-	mkdir -p $(GRUBDIR)
+	mkdir -p $(BUILD_DIR)
 
-kernel: prep $(KSRC)
+kernel: prep $(PAS_SOURCE)
 
-	$(AS) $(ASFLAGS) -o $(COBJ) $(CSRC)
-	$(PP) $(PPFLAGS) $(KSRC)
+	$(AS) $(ASFLAGS) -o $(ASM_OBJECTS) $(ASM_SOURCE)
+	$(PP) $(PPFLAGS) $(PAS_SOURCE)
 
-img:	boot kernel $(ISRC)
+img:	boot kernel $(LD_SOURCE)
 
-	$(LD) $(LDFLAGS) -T$(ISRC) -o $(IOBJ) $(KOBJ) $(COBJ)
+	$(LD) $(LDFLAGS) -T$(LD_SOURCE) -o $(LD_OBJECTS) $(PAS_OBJECTS) $(ASM_OBJECTS)
 
 iso:	img
 
-	cp $(IOBJ) $(BOOTDIR)/image.o
+	mkdir -p $(BUILD_DIR)/boot/grub
+	cp $(LD_OBJECTS) $(BUILD_DIR)/boot/image.o
 
-	@echo 'set timeout=0' > $(CFGFILE)
-	@echo 'set default =0' >> $(CFGFILE)
-	@echo '' >> $(CFGFILE)
-	@echo 'menuentry "PascalOS" {' >> $(CFGFILE)
-	@echo '  multiboot /boot/image.o' >> $(CFGFILE)
-	@echo '  boot' >> $(CFGFILE)
-	@echo '}' >> $(CFGFILE)
+	@echo 'set timeout=0' > $(GRUB_CONFIG)
+	@echo 'set default =0' >> $(GRUB_CONFIG)
+	@echo '' >> $(GRUB_CONFIG)
+	@echo 'menuentry "PascalOS" {' >> $(GRUB_CONFIG)
+	@echo '  multiboot /boot/image.o' >> $(GRUB_CONFIG)
+	@echo '  boot' >> $(GRUB_CONFIG)
+	@echo '}' >> $(GRUB_CONFIG)
 
-	grub-mkrescue --output=$(OUTDIR)/$(ISOF) $(OUTDIR)
+	grub-mkrescue --output=$(BUILD_DIR)/$(ISO_NAME) $(BUILD_DIR)
 
 runq:	iso
 
-	$(QEMU) $(OUTDIR)/$(ISOF)
+	$(QEMU) $(BUILD_DIR)/$(ISO_NAME)
 
 runb:	iso
 
@@ -77,7 +74,7 @@ runb:	iso
 
 clean:
 
-	rm -rf $(OUTDIR)
+	rm -rf $(BUILD_DIR)
 	rm -f *.o
 	rm -f *.ppu
 
