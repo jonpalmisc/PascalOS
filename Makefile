@@ -11,7 +11,7 @@ COBJ=$(OUTDIR)/core.o
 
 # Kernel source
 KSRC=kernel/kernel.pas
-KOBJ=$(OUTDIR)/kernel.o $(OUTDIR)/system.o $(OUTDIR)/vga.o $(OUTDIR)/gdt.o $(OUTDIR)/idt.o $(OUTDIR)/isr.o
+KOBJ:=$(patsubst kernel/%.pas, $(OUTDIR)/%.o, $(wildcard kernel/*.pas))
 
 # Image/link source
 ISRC=image/image.ld
