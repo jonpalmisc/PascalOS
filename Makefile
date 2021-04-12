@@ -67,7 +67,8 @@ runb:	iso
 
 clean:
 
-	rm -rf $(BUILD_DIR)
-	rm -f *.o
-	rm -f *.ppu
+	@rm -rf $(BUILD_DIR)
+	@rm -f *.o
+	@rm -f *.ppu
 
+	@echo "Build artifacts removed."
