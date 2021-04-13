@@ -9,14 +9,6 @@ unit isr;
 
 interface
 
-type
-  TInterruptState = record
-    GS, FS, ES, DS: LongWord;
-    EDI, ESI, EBP, ESP, EBX, EDX, ECX, EAX: LongWord;
-    Interrupt, ErrorCode: LongWord;
-    EIP, CS, EFLAGS, UserESP, SS: LongWord;
-  end;
-
 { Create IDT entries for the common ISRs }
 procedure RegisterHandlers;
 

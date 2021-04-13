@@ -26,6 +26,13 @@ type
     Base: LongWord;
   end;
 
+  TInterruptState = record
+    GS, FS, ES, DS: LongWord;
+    EDI, ESI, EBP, ESP, EBX, EDX, ECX, EAX: LongWord;
+    Interrupt, ErrorCode: LongWord;
+    EIP, CS, EFLAGS, UserESP, SS: LongWord;
+  end;
+
 var
   Entries: array [0..255] of TIDTEntry;
   Region: TIDTRegion;
