@@ -9,7 +9,7 @@ unit kernel;
 
 interface
 
-uses gdt, idt, isr, vga;
+uses gdt, idt, isr, irq, vga;
 
 procedure Main;
 
@@ -50,8 +50,13 @@ begin
   ISR.RegisterHandlers;
   VGA.PrintLine('Done.');
 
+  VGA.Print('[Kernel.Main] Creating core IRQ handlers... ');
+  IRQ.RegisterHandlers;
+  VGA.PrintLine('Done.');
+
   asm
     int 3
+    int 47
   end;
 end;
 
