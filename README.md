@@ -13,7 +13,7 @@ right now. Here's a summary of what is and isn't currently implemented:
 - [x] Boot to kernel entrypoint
 - [x] Basic GDT setup
 - [x] Bare-minimum IDT setup and ISR handling
-- [ ] IRQ handling
+- [x] Bare-minimum IRQ handling
 - [ ] Keyboard support
 - [ ] Virtual memeory (paging)
 - [ ] Dynamic memory allocation
