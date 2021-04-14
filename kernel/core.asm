@@ -50,6 +50,16 @@ ISR%1:
 	jmp ISRCommon
 %endmacro
 
+;; Macro for IRQ handlers with dummy error codes
+%macro IRQStandard 1
+global IRQ%1
+IRQ%1:
+	cli
+	push byte 0
+	push byte 32 + %1
+	jmp IRQCommon
+%endmacro
+
 ;; Generate ISR handlers with the macros above
 
 ISRStandard 0     ; Divide by zero
@@ -85,6 +95,23 @@ ISRStandard 29    ; Reserved
 ISRStandard 30    ; Reserved
 ISRStandard 31    ; Reserved
 
+IRQStandard 0
+IRQStandard 1
+IRQStandard 2
+IRQStandard 3
+IRQStandard 4
+IRQStandard 5
+IRQStandard 6
+IRQStandard 7
+IRQStandard 8
+IRQStandard 9
+IRQStandard 10
+IRQStandard 11
+IRQStandard 12
+IRQStandard 13
+IRQStandard 14
+IRQStandard 15
+
 ;; Common ISR handler to collect arguments and pass control to the kernel
 extern ISRHandleCommon
 ISRCommon:
@@ -115,6 +142,37 @@ ISRCommon:
 	popa
 	add esp,8
 	iret
+
+extern IRQHandleCommon
+IRQCommon:
+	pusha
+
+	push ds
+	push es
+	push fs
+	push gs
+
+	mov ax, 0x10
+	mov ds, ax
+	mov es, ax
+	mov fs, ax
+	mov gs, ax
+	mov eax, esp
+	push eax
+
+	mov eax, IRQHandleCommon
+	call eax
+
+	pop eax
+	pop gs
+	pop fs
+	pop es
+	pop ds
+	popa
+
+	add esp, 8
+	iret
+
 
 ;; Start function
 global KernelStart
