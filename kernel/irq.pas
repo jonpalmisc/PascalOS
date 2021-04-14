@@ -22,6 +22,14 @@ begin
   VGA.Print('[IRQ.HandleCommon] Interrupt request 0x');
   VGA.PrintHex(State.Interrupt);
   VGA.PrintLine(' received!');
+
+  { Signal end of interrupt to subcontroller if needed }
+  if State.Interrupt >= 40 then begin
+    Port.Write($A0, $20);
+  end;
+
+  { Signal end of interrupt to main controller }
+  Port.Write($20, $20);
 end;
 
 { References to the macro-generated IRQ handlers in core.asm }
