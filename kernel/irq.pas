@@ -75,6 +75,10 @@ begin
   IDT.SetEntry(45, LongWord(@Handle13), $08, $8E);
   IDT.SetEntry(46, LongWord(@Handle14), $08, $8E);
   IDT.SetEntry(47, LongWord(@Handle15), $08, $8E);
+
+  asm
+    sti
+  end;
 end;
 
 end.
