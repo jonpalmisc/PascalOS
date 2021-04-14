@@ -46,7 +46,7 @@ begin
   VGA.PrintHex(IDT.Region.Base + IDT.Region.Limit);
   VGA.PrintLine('.');
 
-  VGA.Print('[Kernel.Main] Creating core ISRs... ');
+  VGA.Print('[Kernel.Main] Creating core ISR handlers... ');
   ISR.RegisterHandlers;
   VGA.PrintLine('Done.');
 
